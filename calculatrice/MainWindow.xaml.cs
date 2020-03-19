@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,21 +16,110 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using org.mariuszgromada.math.mxparser;
 
 namespace calculatrice
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Dictionary<string, object> _propertyValues = new Dictionary<string, object>();
+
+        public T GetValue<T>([CallerMemberName] string propertyName = null)
+        {
+            if (_propertyValues.ContainsKey(propertyName))
+                return (T)_propertyValues[propertyName];
+            return default(T);
+        }
+        public bool SetValue<T>(T newValue, [CallerMemberName] string propertyName = null)
+        {
+            var currentValue = GetValue<T>(propertyName);
+            if (currentValue == null && newValue != null
+             || currentValue != null && !currentValue.Equals(newValue))
+            {
+                _propertyValues[propertyName] = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
+            CalcString = "";
+            CurrentValue = "";
+            Historique = new List<string>();
+        }
+
+        public string CalcString
+        {
+            get { return GetValue<string>(); }
+            set { SetValue(value); }
+        }
+        public string CurrentValue
+        {
+            get { return GetValue<string>(); }
+            set { SetValue(value); }
+        }
+        public List<String> Historique
+        {
+            get { return GetValue<List<String>>(); }
+            set { SetValue(value); }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentValue == "NaN")
+            {
+                CurrentValue = "";
+            }
+            string input = (sender as Button).Content as string;
+
+            Regex isNumber = new Regex(@"^\d$");
+
+            if (isNumber.IsMatch(input))
+            {
+                CurrentValue += input;
+            }
+            else if (input == "C")
+            {
+                CalcString = "";
+                CurrentValue = "";
+            }
+            else if (input == "CE")
+            {
+                CurrentValue = "";
+            }
+            else if (input == "=")
+            {
+                CalcString += CurrentValue;
+                CalcString = CalcString.Replace(",", ".");
+                org.mariuszgromada.math.mxparser.Expression expression = new org.mariuszgromada.math.mxparser.Expression(CalcString);
+                double result = expression.calculate();
+                CalcString = "";
+                CurrentValue = result.ToString();
+                Historique.Add(CalcString + "=" + result.ToString());
+            }
+            else if (input == ",")
+            {
+                CurrentValue += input;
+            }
+            else
+            {
+                CalcString += CurrentValue + input;
+                CurrentValue = "";
+            }
+
 
         }
     }
