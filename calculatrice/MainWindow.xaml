@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:calculatrice"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Calculatrice" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -51,7 +51,8 @@
         <Button Grid.Row="3" Grid.Column="5" Content="*" Click="Button_Click"/>
         <Button Grid.Row="4" Grid.Column="5" Content="+" Click="Button_Click"/>
         <Button Grid.Row="5" Grid.Column="5" Content="-" Click="Button_Click"/>
-        
-        <ListView Grid.Column="7" Grid.Row="0" Grid.RowSpan="6" ItemsSource="{Binding Historique}"/>
+
+        <ListView  Grid.Row="0" Grid.Column="7" Grid.RowSpan="5" ItemsSource="{Binding Historique}"/>
+        <Button Grid.Row="5" Grid.Column="7" Content="Supprimer l'historique" Click="Button_Click"/>
     </Grid>
 </Window>

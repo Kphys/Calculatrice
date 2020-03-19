@@ -51,6 +51,7 @@ namespace calculatrice
             return false;
         }
 
+
         #endregion
         public MainWindow()
         {
@@ -58,7 +59,6 @@ namespace calculatrice
             this.DataContext = this;
             CalcString = "";
             CurrentValue = "";
-            Historique = new List<string>();
         }
 
         public string CalcString
@@ -71,10 +71,16 @@ namespace calculatrice
             get { return GetValue<string>(); }
             set { SetValue(value); }
         }
-        public List<String> Historique
+
+        private ObservableCollection<String> _historique;
+        public ObservableCollection<String> Historique
         {
-            get { return GetValue<List<String>>(); }
-            set { SetValue(value); }
+            get
+            {
+                if (_historique == null) _historique = new ObservableCollection<String>();
+                return _historique;
+            }
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -91,6 +97,10 @@ namespace calculatrice
             {
                 CurrentValue += input;
             }
+            else if (input == "Supprimer l'historique")
+            {
+                Historique.Clear();
+            }
             else if (input == "C")
             {
                 CalcString = "";
@@ -106,9 +116,9 @@ namespace calculatrice
                 CalcString = CalcString.Replace(",", ".");
                 org.mariuszgromada.math.mxparser.Expression expression = new org.mariuszgromada.math.mxparser.Expression(CalcString);
                 double result = expression.calculate();
-                CalcString = "";
                 CurrentValue = result.ToString();
                 Historique.Add(CalcString + "=" + result.ToString());
+                CalcString = "";
             }
             else if (input == ",")
             {
