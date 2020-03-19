@@ -112,24 +112,43 @@ namespace calculatrice
             }
             else if (input == "=")
             {
-                CalcString += CurrentValue;
-                CalcString = CalcString.Replace(",", ".");
-                org.mariuszgromada.math.mxparser.Expression expression = new org.mariuszgromada.math.mxparser.Expression(CalcString);
-                double result = expression.calculate();
-                CurrentValue = result.ToString();
-                Historique.Add(CalcString + "=" + result.ToString());
-                CalcString = "";
+                if (CalcString.Length > 0)
+                {
+                    if (CurrentValue.Length == 0)
+                    {
+                        CalcString = CalcString.Substring(0, CalcString.Length - 1);
+                    }
+                    CalcString += CurrentValue;
+                    CalcString = CalcString.Replace(",", ".");
+                    org.mariuszgromada.math.mxparser.Expression expression = new org.mariuszgromada.math.mxparser.Expression(CalcString);
+                    double result = expression.calculate();
+                    CurrentValue = result.ToString();
+                    Historique.Add(CalcString + "=" + result.ToString());
+                    CalcString = "";
+                }
             }
             else if (input == ",")
             {
-                CurrentValue += input;
+                if (CurrentValue.IndexOf(',') == -1 && CurrentValue.Length != 0)
+                {
+                    CurrentValue += input;
+                }
             }
             else
             {
-                CalcString += CurrentValue + input;
-                CurrentValue = "";
+                if (CurrentValue.Substring(CurrentValue.Length - 1) == ",")
+                {
+                    CurrentValue = CurrentValue.Substring(0, CurrentValue.Length - 1);
+                }
+                if (CurrentValue != "")
+                {
+                    CalcString += CurrentValue + input;
+                    CurrentValue = "";
+                } else if (CalcString.Length > 0)
+                {
+                    CalcString = CalcString.Substring(0, CalcString.Length - 1) + input;
+                }
             }
-
 
         }
     }
