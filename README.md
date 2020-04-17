@@ -27,6 +27,8 @@ Benjamin Ferie
 - Séparateur de milliers
 - Prise en charge des nombres à virgule
 - Prise en charge du databinding entre le code et l'interface
+- Prise en charge des priorités et auto-fermeture des parenthèses
+- Thème sombre
 
 ## WIP:
 - Prise en charge des très grand nombre 
