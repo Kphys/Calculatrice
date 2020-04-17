@@ -32,6 +32,8 @@ Benjamin Ferie
 
 ## WIP:
 - Prise en charge des très grand nombre 
+- Template listview
+- Pouvoir déplacer la fenëtre
 
 ## Dépendances:
 
