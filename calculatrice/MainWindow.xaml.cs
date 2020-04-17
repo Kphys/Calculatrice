@@ -113,7 +113,7 @@ namespace calculatrice
                 CurrentValue += input;
                 CurrentValue = format(CurrentValue);
             }
-            else if (input == "Supprimer l'historique")
+            else if (input == "🗑")
             {
                 Historique.Clear();
             }
@@ -297,6 +297,32 @@ namespace calculatrice
             CalcString = "";
             Regex pattern = new Regex(".*(?<==)");
             CurrentValue = pattern.Replace(selectedLine, "");
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Button_Close(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button_maximise(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void button_minimize(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
         }
     }
 }
