@@ -100,11 +100,19 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button KeyboardNavigation.IsTabStop="False" Content="🗕" Width="35" Style="{StaticResource statusButton}" Click="button_minimize" />
-            <Button KeyboardNavigation.IsTabStop="False" Content="🗖" Width="35" Style="{StaticResource statusButton}" Click="button_maximise" />
-            <Button KeyboardNavigation.IsTabStop="False" Content="X" Width="35" Style="{StaticResource closeButton}" Click="Button_Close"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="35"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" MouseDown="Move_Window"/>
+            <Button Grid.Row="0" Grid.Column="1" KeyboardNavigation.IsTabStop="False" Content="🗕" Width="35" Style="{StaticResource statusButton}" Click="button_minimize" />
+            <Button Grid.Row="0" Grid.Column="2" KeyboardNavigation.IsTabStop="False" Content="🗖" Width="35" Style="{StaticResource statusButton}" Click="button_maximise" />
+            <Button Grid.Row="0" Grid.Column="3" KeyboardNavigation.IsTabStop="False" Content="X" Width="35" Style="{StaticResource closeButton}" Click="Button_Close"/>
+        </Grid>
+
 
         <TextBlock Grid.ColumnSpan="4" Grid.Row="2" Text="{Binding CalcString}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="50"/>
         <TextBlock Grid.ColumnSpan="4" Grid.Row="3" Text="{Binding CurrentValue}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="50"/>
@@ -133,7 +141,20 @@
         <Button Grid.Row="6" Grid.Column="5" Grid.ColumnSpan="2" Content="+" Click="Button_Click" Style="{StaticResource classicButton}"/>
         <Button Grid.Row="7" Grid.Column="5" Grid.ColumnSpan="2" Content="-" Click="Button_Click" Style="{StaticResource classicButton}"/>
 
-        <ListView  Grid.Row="2" Grid.Column="8" Grid.RowSpan="5" ItemsSource="{Binding Historique}" MouseDoubleClick="LoadHistorique"/>
+        <!-- 
+            <ListView  Grid.Row="2" Grid.Column="8" Grid.RowSpan="5" ItemsSource="{Binding Historique}" MouseDoubleClick="LoadHistorique"/>
+        -->
+        <ListView Grid.Row="2" Grid.Column="8" Grid.RowSpan="5" ItemsSource="{Binding Historique}" MouseDoubleClick="LoadHistorique">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel >
+                        <TextBlock Text="{Binding Calc}" DockPanel.Dock="Top"/>
+                        <TextBlock Text="=" Margin="25,0,0,0" DockPanel.Dock="Left"/>
+                        <TextBlock Text="{Binding Result}" DockPanel.Dock="Left"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <Button Grid.Row="7" Grid.Column="8" Content="🗑" Click="Button_Click" Style="{StaticResource classicButton}"/>
     </Grid>
 </Window>

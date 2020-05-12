@@ -24,6 +24,17 @@ namespace calculatrice
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
+    public class Calcul
+    {
+        public string Calc { get; set; }
+        public string Result { get; set; }
+        public Calcul(string calcul, string result)
+        {
+            this.Calc = calcul;
+            this.Result = result;
+        }
+
+    }
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 
@@ -73,12 +84,12 @@ namespace calculatrice
             set { SetValue(value); }
         }
 
-        private ObservableCollection<String> _historique;
-        public ObservableCollection<String> Historique
+        private ObservableCollection<Calcul> _historique;
+        public ObservableCollection<Calcul> Historique
         {
             get
             {
-                if (_historique == null) _historique = new ObservableCollection<String>();
+                if (_historique == null) _historique = new ObservableCollection<Calcul>();
                 return _historique;
             }
 
@@ -149,7 +160,7 @@ namespace calculatrice
                     org.mariuszgromada.math.mxparser.Expression expression = new org.mariuszgromada.math.mxparser.Expression(new string(CalcString.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray()));
                     double result = expression.calculate();
                     CurrentValue = format(result.ToString());
-                    Historique.Add(CalcString + "=" + format(result.ToString()));
+                    Historique.Add(new Calcul(CalcString, format(result.ToString())));
                     CalcString = "";
                 }
             }
@@ -293,10 +304,9 @@ namespace calculatrice
 
         private void LoadHistorique(object sender, MouseButtonEventArgs e)
         {
-            string selectedLine = (sender as ListView).SelectedItem as string;
+            Calcul selectedLine = (sender as ListView).SelectedItem as Calcul;
             CalcString = "";
-            Regex pattern = new Regex(".*(?<==)");
-            CurrentValue = pattern.Replace(selectedLine, "");
+            CurrentValue = selectedLine.Result;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -323,6 +333,12 @@ namespace calculatrice
         private void button_minimize(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void Move_Window(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
     }
 }
