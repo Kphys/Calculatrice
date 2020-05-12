@@ -29,11 +29,11 @@ Benjamin Ferie
 - Prise en charge du databinding entre le code et l'interface
 - Prise en charge des priorités et auto-fermeture des parenthèses
 - Thème sombre
+- Template listview
+- Pouvoir déplacer la fenëtre
 
 ## WIP:
 - Prise en charge des très grand nombre 
-- Template listview
-- Pouvoir déplacer la fenëtre
 
 ## Dépendances:
 
